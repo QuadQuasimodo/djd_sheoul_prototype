@@ -11,3 +11,5 @@ The particle Renderer on both the Fire and FireBlaze particle systems only rende
 ## Problems
 
 * The light goes trough objects(?) it illuminates the ground outside the box if a light is put near the wall.
+
+_also EldirishInquisition is me, rafael. I messed up the logins on my end_
