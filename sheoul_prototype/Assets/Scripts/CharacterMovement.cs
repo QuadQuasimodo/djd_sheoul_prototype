@@ -5,11 +5,11 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     // "Who's Moving?"
-    [SerializeField]
+    [SerializeField] 
     private CharacterController controller;
 
     // Default Speed Value
-    [SerializeField]
+    [SerializeField] [Tooltip("Determines the player's speed (floats)")] 
     private float speed = 6.5f;
 
     // Start is called before the first frame update
