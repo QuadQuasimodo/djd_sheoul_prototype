@@ -31,9 +31,12 @@ public class InteractableObject : MonoBehaviour
         animator = GetComponent<Animator>();
         interactedWith = false;
 
-        //for torches
-        fire = GetComponentInChildren<ParticleSystem>()?.gameObject;
-        fire?.SetActive(false);
+
+        if (type == InteractiveType.TORCH)
+        {
+            fire = GetComponentInChildren<ParticleSystem>()?.gameObject;
+            fire.SetActive(false);
+        }
     }
 
     public void Activate()
@@ -66,10 +69,6 @@ public class InteractableObject : MonoBehaviour
        
         if(!interactedWith)fire.SetActive(true);
         interactedWith = true;
-        print("bzz");
-        
-
-
     }
 
     private void ProcessActivationChain()

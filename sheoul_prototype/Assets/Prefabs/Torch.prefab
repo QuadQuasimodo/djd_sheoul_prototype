@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1591078767416266752}
   - component: {fileID: 1591078767416266753}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: TorchPole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 1591078767580275058}
   - component: {fileID: 1591078767580275055}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: FireBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,14 +203,13 @@ MonoBehaviour:
   type: 4
   inventoryName: 
   inventoryIcon: {fileID: 0}
-  pickupText: 
-  pickedupText: 
-  requirementText: 
   interactText: Press 'E' to Light
   interactedText: 
+  requirementText: 
   inventoryRequirements: []
   activationChain: []
-  interactionChain: []
+  interactionChain:
+  - {fileID: 0}
 --- !u!1 &1591078768828140618
 GameObject:
   m_ObjectHideFlags: 0
