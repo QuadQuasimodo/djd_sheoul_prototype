@@ -102,7 +102,9 @@ public class PlayerInteractions : MonoBehaviour
         {
             if (currentInteractive.type == InteractableObject.InteractiveType.PICKABLE)
                 Pick();
-         
+
+            else if (currentInteractive.type == InteractableObject.InteractiveType.TORCH)
+                currentInteractive.LightOn();
             else Interact();
         }
     }

@@ -2,7 +2,7 @@
 
 public class InteractableObject : MonoBehaviour
 {
-    public enum InteractiveType { PICKABLE, INTERACT_ONCE, INTERACT_MULTIPLE, INDIRECT };
+    public enum InteractiveType { PICKABLE, INTERACT_ONCE, INTERACT_MULTIPLE, INDIRECT, TORCH };
 
     public bool                 isActive;
     public bool                 interactedWith;
@@ -25,10 +25,16 @@ public class InteractableObject : MonoBehaviour
 
     private Animator           animator;
 
+    GameObject fire;
+
     public void Start()
     {
         animator = GetComponent<Animator>();
         interactedWith = false;
+
+        //for torches
+        fire = GetComponentInChildren<ParticleSystem>()?.gameObject;
+        fire?.SetActive(false);
     }
 
     public void Activate()
@@ -52,6 +58,19 @@ public class InteractableObject : MonoBehaviour
             }
         }
         interactedWith = true;
+    }
+
+    // For torches
+    public void LightOn()
+    {
+        //Light l = GetComponentInChildren<Light>();
+       
+        if(!interactedWith)fire.SetActive(true);
+        interactedWith = true;
+        print("bzz");
+        
+
+
     }
 
     private void ProcessActivationChain()
