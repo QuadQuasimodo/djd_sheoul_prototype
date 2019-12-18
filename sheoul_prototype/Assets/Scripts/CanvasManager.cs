@@ -15,7 +15,6 @@ public class CanvasManager : MonoBehaviour
 
     public void ShowInteractionPanel(string interactionMessage)
     {
-        Debug.Log(interactionMessage);
         if (interactionMessage != null)
         {
             interactionText.text = interactionMessage;
