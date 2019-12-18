@@ -12,11 +12,10 @@ public class InteractableObject : MonoBehaviour
     public string               inventoryName;
     public Sprite               inventoryIcon;
 
-    public string               pickupText;
-    public string               pickedupText;
-    public string               requirementText;
     public string               interactText;
     public string               interactedText;
+    public string               requirementText;
+
 
 
     public InteractableObject[] inventoryRequirements;

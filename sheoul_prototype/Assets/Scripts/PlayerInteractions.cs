@@ -7,7 +7,7 @@ public class PlayerInteractions : MonoBehaviour
     private const float  MAX_INTERACTION_DISTANCE = 3.0f;
 
 
-    public CanvasManager canvasManager;
+    public CanvasManager             canvasManager;
     private Transform                cameraTransform;
     private InteractableObject       currentInteractive;
 
@@ -36,7 +36,10 @@ public class PlayerInteractions : MonoBehaviour
                             MAX_INTERACTION_DISTANCE))
         {
             InteractableObject newInteractive =
+                (hitInfo.collider.GetComponent<InteractableObject>() == null) ?
+                hitInfo.collider.GetComponentInParent<InteractableObject>() :
                 hitInfo.collider.GetComponent<InteractableObject>();
+
 
             if (newInteractive != null && newInteractive != currentInteractive)
                 SetCurrentInteractive(newInteractive);
@@ -53,7 +56,7 @@ public class PlayerInteractions : MonoBehaviour
 
         if (currentInteractive.type ==
             InteractableObject.InteractiveType.PICKABLE)
-                canvasManager.ShowInteractionPanel(currentInteractive.pickupText);
+                canvasManager.ShowInteractionPanel(currentInteractive.interactText);
 
         else if (HasInteractionRequirements())
         {
@@ -124,8 +127,7 @@ public class PlayerInteractions : MonoBehaviour
             {
                 RemoveFromInventory(currentInteractive.inventoryRequirements[i]);
 
-                if (currentInteractive.type != InteractableObject.InteractiveType.PICKABLE)
-                    canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
+                canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
             }
             currentInteractive.Interact();
         }
@@ -159,7 +161,7 @@ public class PlayerInteractions : MonoBehaviour
     private void ShowPickeUpMessage()
     {
         canvasManager.HideInteractionPanel();
-        canvasManager.ShowInteractionPanel(currentInteractive.pickedupText);
+        canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
         currentInteractive.interactedWith = true;
     }
     IEnumerator WaitTime(float time)

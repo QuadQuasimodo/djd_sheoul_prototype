@@ -206,7 +206,7 @@ MonoBehaviour:
   pickupText: 
   pickedupText: 
   requirementText: 
-  interactText: Press E to Light
+  interactText: Press 'E' to Light
   interactedText: 
   inventoryRequirements: []
   activationChain: []
