@@ -7,9 +7,9 @@ public class PlayerMovement : MonoBehaviour
     private const float MAX_ACCELERATION         = 100.0f;
     private const float GRAVITY_ACCELERATION     = 20.0f;
 
-    private const float MAX_FORWARD_VELOCITY     = 6.0f;
+    private const float MAX_FORWARD_VELOCITY     = 5.0f;
     private const float MAX_BACKWARD_VELOCITY    = 4.0f;
-    private const float MAX_STRAFE_VELOCITY      = 5.0f;
+    private const float MAX_STRAFE_VELOCITY      = 4.0f;
     private const float MAX_FALL_VELOCITY        = 100.0f;
     private const float ANGULAR_VELOCITY_FACTOR  = 2.0f;
 
