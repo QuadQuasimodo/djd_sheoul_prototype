@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public class InteractableObject : MonoBehaviour
+public class Interactable : MonoBehaviour
 {
     public enum InteractiveType { PICKABLE, INTERACT_ONCE, INTERACT_MULTIPLE, INDIRECT, TORCH };
 
     public bool                 isActive;
-    public bool                 interactedWith;
+    public bool                 hasInteracted;
 
     public InteractiveType      type;
 
@@ -17,10 +17,13 @@ public class InteractableObject : MonoBehaviour
     public string               requirementText;
 
 
+    public string needs;
 
-    public InteractableObject[] inventoryRequirements;
-    public InteractableObject[] activationChain;
-    public InteractableObject[] interactionChain;
+    public Interactable[] inventoryRequirements;
+    public Interactable[] activationRequirements;
+
+    public Interactable[] activationChain;
+    public Interactable[] interactionChain;
 
     private Animator           animator;
 
@@ -29,8 +32,13 @@ public class InteractableObject : MonoBehaviour
     public void Start()
     {
         animator = GetComponent<Animator>();
-        interactedWith = false;
+        hasInteracted = false;
 
+        needs = default;
+        if (inventoryRequirements.Length!=0 && activationRequirements.Length!=0) needs = "Both";
+        else if (inventoryRequirements.Length!=0) needs = "Inventory";
+        else if (activationRequirements.Length!=0) needs = "Activation";
+        else needs = "None";
 
         if (type == InteractiveType.TORCH)
         {
@@ -47,7 +55,9 @@ public class InteractableObject : MonoBehaviour
     public void Interact()
     {
         if (animator != null)
+        {
             animator.SetTrigger("Interacted");
+        }
 
         if (isActive)
         {
@@ -59,7 +69,7 @@ public class InteractableObject : MonoBehaviour
                 GetComponent<Collider>().enabled = false;
             }
         }
-        interactedWith = true;
+        hasInteracted = true;
     }
 
     // For torches
@@ -67,8 +77,8 @@ public class InteractableObject : MonoBehaviour
     {
         //Light l = GetComponentInChildren<Light>();
        
-        if(!interactedWith)fire.SetActive(true);
-        interactedWith = true;
+        if(!hasInteracted)fire.SetActive(true);
+        hasInteracted = true;
     }
 
     private void ProcessActivationChain()

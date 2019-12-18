@@ -7,20 +7,22 @@ public class PlayerInteractions : MonoBehaviour
     private const float  MAX_INTERACTION_DISTANCE = 3.0f;
 
 
-    public CanvasManager             canvasManager;
-    private Transform                cameraTransform;
-    private InteractableObject       currentInteractive;
+    public CanvasManager       canvasManager;
+    private Transform          cameraTransform;
+    private Interactable       currentInteractive;
 
-    private List<InteractableObject> inventory;
+    private List<Interactable> inventory;
 
-    private bool                     hasRequirements;
+
+    private bool                     hasInventoryRequirements;
+    private bool                     hasActivationRequirements;
 
 
 
     public void Start()
     {
         cameraTransform = GetComponentInChildren<Camera>().transform;
-        inventory = new List<InteractableObject>();
+        inventory = new List<Interactable>();
     }
 
     public void Update()
@@ -35,11 +37,10 @@ public class PlayerInteractions : MonoBehaviour
                             out RaycastHit hitInfo,
                             MAX_INTERACTION_DISTANCE))
         {
-            InteractableObject newInteractive =
-                (hitInfo.collider.GetComponent<InteractableObject>() == null) ?
-                hitInfo.collider.GetComponentInParent<InteractableObject>() :
-                hitInfo.collider.GetComponent<InteractableObject>();
-
+            Interactable newInteractive =
+                (hitInfo.collider.GetComponent<Interactable>() == null) ?
+                hitInfo.collider.GetComponentInParent<Interactable>() :
+                hitInfo.collider.GetComponent<Interactable>();
 
             if (newInteractive != null && newInteractive != currentInteractive)
                 SetCurrentInteractive(newInteractive);
@@ -50,28 +51,53 @@ public class PlayerInteractions : MonoBehaviour
             ClearCurrentInteractive();
     }
 
-    private void SetCurrentInteractive(InteractableObject newInteractive)
+    private void SetCurrentInteractive(Interactable newInteractive)
     {
         currentInteractive = newInteractive;
 
-        if (currentInteractive.type ==
-            InteractableObject.InteractiveType.PICKABLE)
-                canvasManager.ShowInteractionPanel(currentInteractive.interactText);
+        switch (currentInteractive.needs)
+        {
+            case "Both":
+                if (HasInventoryRequirements() && HasActivationRequirements())
+                {
+                    hasInventoryRequirements = true;
+                    hasActivationRequirements = true;
 
-        else if (HasInteractionRequirements())
-        {
-            hasRequirements = true;
-            canvasManager.ShowInteractionPanel(
-                currentInteractive.interactText);
-        }
-        else
-        {
-            hasRequirements = false;
-            canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
+                    if (!HasInteracted(currentInteractive))
+                        canvasManager.ShowInteractionPanel(
+                        currentInteractive.interactText);
+                }
+                else canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
+                break;
+            case "Inventory":
+                if (HasInventoryRequirements())
+                {
+                    hasInventoryRequirements = true;
+
+                    if (!HasInteracted(currentInteractive))
+                        canvasManager.ShowInteractionPanel(
+                        currentInteractive.interactText);
+                }
+                else canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
+                break;
+            case "Activation":
+                if (HasActivationRequirements())
+                {
+                    hasActivationRequirements = true;
+
+                    if (!HasInteracted(currentInteractive))
+                        canvasManager.ShowInteractionPanel(
+                        currentInteractive.interactText);
+                }
+                else canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
+                break;
+            case "None":
+                canvasManager.ShowInteractionPanel(currentInteractive.interactText);
+                break;
         }
     }
 
-    private bool HasInteractionRequirements()
+    private bool HasInventoryRequirements()
     {
         if (currentInteractive.inventoryRequirements == null)
             return true;
@@ -82,12 +108,23 @@ public class PlayerInteractions : MonoBehaviour
 
         return true;
     }
+    
+    private bool HasActivationRequirements()
+    {
+        int activeRequiremnets = 0;
+
+        for (int i = 0; i < currentInteractive.activationRequirements.Length; ++i)
+            if (currentInteractive.activationRequirements[i].hasInteracted) activeRequiremnets++;
+
+        if (activeRequiremnets == currentInteractive.activationRequirements.Length) return true;
+        else return false;
+    }
 
     private void ClearCurrentInteractive()
     {
         if (currentInteractive != null)
         {
-            if (currentInteractive.interactedWith)
+            if (currentInteractive.hasInteracted)
             {
                 StartCoroutine(WaitTime(1));
             }
@@ -103,10 +140,10 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && currentInteractive != null)
         {
-            if (currentInteractive.type == InteractableObject.InteractiveType.PICKABLE)
+            if (currentInteractive.type == Interactable.InteractiveType.PICKABLE)
                 Pick();
 
-            else if (currentInteractive.type == InteractableObject.InteractiveType.TORCH)
+            else if (currentInteractive.type == Interactable.InteractiveType.TORCH)
                 currentInteractive.LightOn();
             else Interact();
         }
@@ -121,31 +158,59 @@ public class PlayerInteractions : MonoBehaviour
 
     private void Interact()
     {
-        if (hasRequirements)
+        switch (currentInteractive.needs)
         {
-            for (int i = 0; i < currentInteractive.inventoryRequirements.Length; ++i)
-            {
-                RemoveFromInventory(currentInteractive.inventoryRequirements[i]);
+            case "Both":
+                if (hasInventoryRequirements && hasActivationRequirements)
+                {
+                    for (int i = 0; i < currentInteractive.inventoryRequirements.Length; ++i)
+                    {
+                        RemoveFromInventory(currentInteractive.inventoryRequirements[i]);
 
-                canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
-            }
-            currentInteractive.Interact();
+                        canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
+                    }
+                    currentInteractive.Interact();
+                }
+                break;
+            case "Inventory":
+                if (hasInventoryRequirements)
+                {
+                    for (int i = 0; i < currentInteractive.inventoryRequirements.Length; ++i)
+                    {
+                        RemoveFromInventory(currentInteractive.inventoryRequirements[i]);
+
+                        canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
+                    }
+                    currentInteractive.Interact();
+                }
+                break;
+            case "Activation":
+                if (hasActivationRequirements) currentInteractive.Interact();
+                break;
+            case "None":
+                currentInteractive.Interact();
+                break;
         }
     }
 
-    private void AddToInventory(InteractableObject item)
+    private void AddToInventory(Interactable item)
     {
         inventory.Add(item);
         UpdateInventoryIcons();
     }
 
-    private void RemoveFromInventory(InteractableObject item)
+    private void RemoveFromInventory(Interactable item)
     {
         inventory.Remove(item);
         UpdateInventoryIcons();
     }
 
-    private bool HasInInventory(InteractableObject item)
+    private bool HasInteracted(Interactable item)
+    {
+        return item.hasInteracted;
+    }
+    
+    private bool HasInInventory(Interactable item)
     {
         return inventory.Contains(item);
     }
@@ -162,7 +227,7 @@ public class PlayerInteractions : MonoBehaviour
     {
         canvasManager.HideInteractionPanel();
         canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
-        currentInteractive.interactedWith = true;
+        currentInteractive.hasInteracted = true;
     }
     IEnumerator WaitTime(float time)
     {

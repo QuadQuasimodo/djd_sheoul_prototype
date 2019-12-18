@@ -5,6 +5,7 @@ using System.Collections;
 public class CanvasManager : MonoBehaviour
 {
     public GameObject interactionPanel;
+    public GameObject inventoryPanel;
     public Text interactionText;
     public Image[] inventoryIcons;
 
@@ -25,6 +26,14 @@ public class CanvasManager : MonoBehaviour
     public void HideInteractionPanel()
     {
         interactionPanel.SetActive(false);
+    }
+    
+    public void HideInventoryPanel()
+    {
+        inventoryPanel.SetActive(false);
+    }public void ShowInventoryPanel()
+    {
+        inventoryPanel.SetActive(true);
     }
 
     public void ClearInventoryIcons()
