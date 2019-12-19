@@ -514,7 +514,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1375155280}
-        m_MethodName: StartPrototypeScene
+        m_MethodName: StartPrototype
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -569,7 +569,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1375155275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c599afe8097ebd1479b7af816f3eef1c, type: 3}
+  m_Script: {fileID: 11500000, guid: 69df41a99445e3b449517ce9f277b67d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1577907673

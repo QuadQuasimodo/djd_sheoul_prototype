@@ -6,6 +6,7 @@ public class PlayerInteractions : MonoBehaviour
 {
     private const float  MAX_INTERACTION_DISTANCE = 3.0f;
 
+    public Intro intro;
 
     public CanvasManager       canvasManager;
     private Transform          cameraTransform;
@@ -27,8 +28,11 @@ public class PlayerInteractions : MonoBehaviour
 
     public void Update()
     {
-        CheckForInteractive();
-        CheckForInteraction();
+        if(intro.introFinished)
+        {
+            CheckForInteractive();
+            CheckForInteraction();
+        }
     }
 
     private void CheckForInteractive()
@@ -63,7 +67,7 @@ public class PlayerInteractions : MonoBehaviour
                     hasInventoryRequirements = true;
                     hasActivationRequirements = true;
 
-                    if (!HasInteracted(currentInteractive))
+                    if (!currentInteractive.hasInteracted)
                         canvasManager.ShowInteractionPanel(
                         currentInteractive.interactText);
                 }
@@ -74,7 +78,7 @@ public class PlayerInteractions : MonoBehaviour
                 {
                     hasInventoryRequirements = true;
 
-                    if (!HasInteracted(currentInteractive))
+                    if (!currentInteractive.hasInteracted)
                         canvasManager.ShowInteractionPanel(
                         currentInteractive.interactText);
                 }
@@ -85,14 +89,15 @@ public class PlayerInteractions : MonoBehaviour
                 {
                     hasActivationRequirements = true;
 
-                    if (!HasInteracted(currentInteractive))
+                    if (!currentInteractive.hasInteracted)
                         canvasManager.ShowInteractionPanel(
                         currentInteractive.interactText);
                 }
                 else canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
                 break;
             case "None":
-                canvasManager.ShowInteractionPanel(currentInteractive.interactText);
+                if (!currentInteractive.hasInteracted)
+                    canvasManager.ShowInteractionPanel(currentInteractive.interactText);
                 break;
         }
     }
@@ -111,12 +116,12 @@ public class PlayerInteractions : MonoBehaviour
     
     private bool HasActivationRequirements()
     {
-        int activeRequiremnets = 0;
+        int activated = 0;
 
         for (int i = 0; i < currentInteractive.activationRequirements.Length; ++i)
-            if (currentInteractive.activationRequirements[i].hasInteracted) activeRequiremnets++;
+            if (currentInteractive.activationRequirements[i].hasInteracted) activated++;
 
-        if (activeRequiremnets == currentInteractive.activationRequirements.Length) return true;
+        if (activated == currentInteractive.activationRequirements.Length) return true;
         else return false;
     }
 
@@ -203,11 +208,6 @@ public class PlayerInteractions : MonoBehaviour
     {
         inventory.Remove(item);
         UpdateInventoryIcons();
-    }
-
-    private bool HasInteracted(Interactable item)
-    {
-        return item.hasInteracted;
     }
     
     private bool HasInInventory(Interactable item)

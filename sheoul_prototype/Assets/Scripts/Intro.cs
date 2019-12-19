@@ -14,25 +14,32 @@ public class Intro : MonoBehaviour
     private Transform cameraTransform;
     private string currentString;
 
+    public bool introFinished;
+
     // Start is called before the first frame update
     void Start()
     {
         cameraTransform = GetComponentInChildren<Camera>().transform;
         canvasManager.HideInventoryPanel();
         currentString = "";
+        introFinished = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckForIntroTorch();
-        
-        if (Input.GetKeyDown(KeyCode.E) && currentString == "IntroTorch")
+        if (!introFinished)
         {
-            Destroy(introTorch);
-            playerTorch.SetActive(true);
-            canvasManager.ShowInventoryPanel();
-            canvasManager.HideInteractionPanel();
+            CheckForIntroTorch();
+
+            if (Input.GetKeyDown(KeyCode.E) && currentString == "IntroTorch")
+            {
+                Destroy(introTorch);
+                playerTorch.SetActive(true);
+                canvasManager.ShowInventoryPanel();
+                canvasManager.HideInteractionPanel();
+                introFinished = true;
+            }
         }
     }
 
@@ -49,6 +56,7 @@ public class Intro : MonoBehaviour
                 currentString = newString;
 
             if (currentString == "IntroTorch") canvasManager.ShowInteractionPanel("Press 'E' to pick up torch");
+            else canvasManager.HideInteractionPanel();
         }
     }
 }

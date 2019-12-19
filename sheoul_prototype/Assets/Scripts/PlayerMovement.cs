@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     private const float MIN_HEAD_LOOK_ROTATION   = 75.0f;
     private const float MAX_HEAD_LOOK_ROTATION   = 75.0f;
 
-
+    private Vector3 spawn;
     //Istance Variables
 
     private CharacterController controller;
@@ -38,7 +38,12 @@ public class PlayerMovement : MonoBehaviour
         acceleration     = Vector3.zero;
         velocity         = Vector3.zero;
         velocityFactor   = WALK_VELOCITY_FACTOR;
+
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        spawn = transform.localPosition;
+        spawn.y += 2;
     }
 
     // Update is called once per frame
@@ -47,8 +52,9 @@ public class PlayerMovement : MonoBehaviour
         UpdateVelocityFactor();
         UpdateRotation();
         UpdateCamera();
-    }
+        if (transform.position.y < -50) Kill();
 
+    }
     private void UpdateVelocityFactor()
     {
         velocityFactor = Input.GetButton("Run") ?
@@ -116,5 +122,15 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = velocity * Time.fixedDeltaTime;
 
         controller.Move(transform.TransformVector(move));
+    }
+
+    private void Kill()
+    {
+         acceleration = Vector3.zero;
+         velocity = Vector3.zero;
+         controller.enabled = false;
+
+         transform.localPosition = spawn;
+         controller.enabled = true;
     }
 }

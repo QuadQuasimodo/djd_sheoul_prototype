@@ -6,6 +6,8 @@ public class Interactable : MonoBehaviour
 
     public bool                 isActive;
     public bool                 hasInteracted;
+    public bool                 startsLit;
+
 
     public InteractiveType      type;
 
@@ -43,7 +45,13 @@ public class Interactable : MonoBehaviour
         if (type == InteractiveType.TORCH)
         {
             fire = GetComponentInChildren<ParticleSystem>()?.gameObject;
-            fire.SetActive(false);
+
+            if (!startsLit)
+            {
+                fire.SetActive(false);
+                hasInteracted = false;
+            }
+            else hasInteracted = true;
         }
     }
 
@@ -76,9 +84,9 @@ public class Interactable : MonoBehaviour
     public void LightOn()
     {
         //Light l = GetComponentInChildren<Light>();
-       
-        if(!hasInteracted)fire.SetActive(true);
         hasInteracted = true;
+
+        fire.SetActive(true);
     }
 
     private void ProcessActivationChain()
