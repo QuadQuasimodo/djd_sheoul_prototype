@@ -83,7 +83,6 @@ public class Interactable : MonoBehaviour
     // For torches
     public void LightOn()
     {
-        //Light l = GetComponentInChildren<Light>();
         hasInteracted = true;
 
         fire.SetActive(true);
