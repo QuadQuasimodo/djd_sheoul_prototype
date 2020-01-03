@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
@@ -105,4 +105,4 @@ public class Interactable : MonoBehaviour
                 interactionChain[i].Interact();
         }
     }
-}
+}*/

@@ -6,19 +6,20 @@ using System.Collections;
     /// </summary>
     /// 
     
-    public  abstract class Interacteable  
+    public  abstract class Interacteable : MonoBehaviour  
     {
         
-        
-
+    
         [HideInInspector] public bool IsActive {get;  set;} = false;
         //public bool Active {get; set;}
         public bool StartsActive {get; set;}
 
-        public InteractionGroup myInterGroup {get; set;}
-        protected int groupIndex {get; set;}
-
+        [HideInInspector]
+        public InteractionGroup myInterGroup {get; set;} = null;
+        public int groupIndex {get; set;}
         public bool unlocked {get; set;} = true;
+
+        public bool RequiresOthersFromGroup {get; set;} = false;
 
         /// <summary>
         /// Called when player interacts with this
@@ -28,15 +29,24 @@ using System.Collections;
         public virtual void OnInteract(bool simult = false)
         {
             this.Activate();
+            int activeCount = 0;
+            foreach(Interacteable f in myInterGroup?.interactionGroup)
+            {
+
+                if (f.IsActive) activeCount++;
+
+            }
+
+            if(!(activeCount == myInterGroup?.interactionGroup.Count) && RequiresOthersFromGroup) return;
 
             if (!simult && !unlocked)
             {
-                for(int i = groupIndex; i < myInterGroup.interactionGroup.Count; i++)
+                for(int i = groupIndex; i < myInterGroup?.interactionGroup.Count; i++)
                 {
                     for (int x = groupIndex; x > 0; x--)
                     {
-                        myInterGroup.interactionGroup[i].Activate();
-                        myInterGroup.interactionGroup[x].Activate();
+                        myInterGroup?.interactionGroup[i].Activate();
+                        myInterGroup?.interactionGroup[x].Activate();
                         WaitTime(myInterGroup.activationDelay);
                     }
 
@@ -46,7 +56,7 @@ using System.Collections;
             }
             else if(simult && !unlocked) 
             {
-                foreach(Interacteable i in myInterGroup.interactionGroup)
+                foreach(Interacteable i in myInterGroup?.interactionGroup)
                 {
 
                     i.Activate();
@@ -58,7 +68,7 @@ using System.Collections;
 
         }
 
-        protected abstract void Activate();
+        public abstract void Activate();
 
         // On player interacting with an instance of this
         // the object will activate all interacteable
