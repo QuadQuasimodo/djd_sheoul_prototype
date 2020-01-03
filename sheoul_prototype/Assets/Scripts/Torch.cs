@@ -9,13 +9,14 @@ using UnityEngine;
             if(StartsActive) Activate();
         }
 
-        public override void Activate()
+        protected override void Activate()
         {
             if(IsActive) return;
             Fire.SetActive(true);
             IsActive = true;
 
-
         }
+
+        
 
     }

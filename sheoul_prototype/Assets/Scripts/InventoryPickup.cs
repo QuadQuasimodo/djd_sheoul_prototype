@@ -10,11 +10,11 @@ using UnityEngine;
     public Sprite               inventoryIcon;
 
     // Gets picked up and put in ivnentory
-    public override void Activate()
+    protected override void Activate()
     {
 
         IsActive = true;
-        Destroy(gameObject);
+       
 
     }
 
