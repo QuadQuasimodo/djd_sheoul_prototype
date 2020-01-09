@@ -2,11 +2,14 @@ using UnityEngine;
 
     public class Torch : Interacteable
     {
-        
-        GameObject Fire {get; set;}
 
-        private void Awake() {
+    [SerializeField] private GameObject Fire;
+
+        private void Awake()
+        {
             if(StartsActive) Activate();
+            
+
         }
 
         protected override void Activate()
@@ -14,9 +17,5 @@ using UnityEngine;
             if(IsActive) return;
             Fire.SetActive(true);
             IsActive = true;
-
         }
-
-        
-
     }

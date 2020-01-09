@@ -28,11 +28,14 @@ public class PlayerInteractions : MonoBehaviour
 
     public void Update()
     {
-        if(intro.introFinished)
+        CheckForInteractive();
+        CheckForInteraction();
+
+        /*if(intro.introFinished)
         {
             CheckForInteractive();
             CheckForInteraction();
-        }
+        }*/
     }
 
     private void CheckForInteractive()
@@ -131,49 +134,5 @@ public class PlayerInteractions : MonoBehaviour
         canvasManager.HideInteractionPanel();
     }
 
-   /* private void Interact()
-    {
-        switch (currentInteractive.needs)
-        {
-            case "Both":
-                if (hasInventoryRequirements && hasActivationRequirements)
-                {
-                    for (int i = 0; i < currentInteractive.inventoryRequirements.Length; ++i)
-                    {
-                        RemoveFromInventory(currentInteractive.inventoryRequirements[i]);
-
-                        canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
-                    }
-                    currentInteractive.Interact();
-                }
-                break;
-            case "Inventory":
-                if (hasInventoryRequirements)
-                {
-                    for (int i = 0; i < currentInteractive.inventoryRequirements.Length; ++i)
-                    {
-                        RemoveFromInventory(currentInteractive.inventoryRequirements[i]);
-
-                        canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
-                    }
-                    currentInteractive.Interact();
-                }
-                break;
-            case "Activation":
-                if (hasActivationRequirements) currentInteractive.Interact();
-                break;
-            case "None":
-                currentInteractive.Interact();
-                break;
-        }
-    }*/
-
-
-
-
-    
-
-
-
-
+   
 }

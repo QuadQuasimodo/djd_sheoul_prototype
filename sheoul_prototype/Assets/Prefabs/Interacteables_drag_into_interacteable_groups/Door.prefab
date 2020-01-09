@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 7826295795706582864}
   - component: {fileID: 7826295795706582865}
   - component: {fileID: 7826295795706582868}
-  - component: {fileID: 7826295795706582866}
   - component: {fileID: 7826295795706582869}
+  - component: {fileID: 7509604870337037451}
   m_Layer: 0
-  m_Name: DoorThatRequiresKey
+  m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,30 +108,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7826295795706582866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7826295795706582867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31cce2603b7539c44afb65bef80b8c87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isActive: 0
-  hasInteracted: 0
-  type: 1
-  inventoryName: 
-  inventoryIcon: {fileID: 0}
-  interactText: Press 'E' to open door
-  interactedText: You opened the door
-  requirementText: Missing a key
-  inventoryRequirements:
-  - {fileID: 0}
-  activationChain: []
-  interactionChain: []
 --- !u!95 &7826295795706582869
 Animator:
   serializedVersion: 3
@@ -151,3 +127,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7509604870337037451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7826295795706582867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68e9933f5daca20469b1f69166f6ecd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactText: Press E to Open
+  interactedText: Opened!
+  requirementText: Needs something else
+  StartsActive: 0
+  unlocked: 1
+  RequiresOthersFromGroup: 0
+  ActivateableByOtherFromGroup: 1

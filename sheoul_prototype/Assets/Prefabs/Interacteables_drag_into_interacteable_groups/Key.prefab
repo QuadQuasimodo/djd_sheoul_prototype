@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7176130915277633407}
-  - component: {fileID: 7176130915277633404}
+  - component: {fileID: 3267909980653913382}
   m_Layer: 0
   m_Name: Key
   m_TagString: Untagged
@@ -77,7 +77,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 111.82101, z: 0}
---- !u!114 &7176130915277633404
+--- !u!114 &3267909980653913382
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,20 +86,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 7176130915277633401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31cce2603b7539c44afb65bef80b8c87, type: 3}
+  m_Script: {fileID: 11500000, guid: afc84d2f15b7015408fb61fb59e0af03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
-  interactedWith: 0
-  type: 0
-  inventoryName: key
-  inventoryIcon: {fileID: 21300000, guid: d467ebcfe5e0319448189518e01ae51f, type: 3}
+  interactText: Pickup key
+  interactedText: 
   requirementText: 
-  interactText: Press 'E' to pick up key
-  interactedText: You picked up the key
-  inventoryRequirements: []
-  activationChain: []
-  interactionChain: []
+  StartsActive: 0
+  unlocked: 1
+  RequiresOthersFromGroup: 0
+  ActivateableByOtherFromGroup: 1
+  inventoryName: 
+  inventoryIcon: {fileID: 0}
 --- !u!1 &8376905613260424240
 GameObject:
   m_ObjectHideFlags: 0

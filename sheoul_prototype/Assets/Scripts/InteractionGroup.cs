@@ -3,7 +3,14 @@ using System.Collections.Generic;
 
 public class InteractionGroup : MonoBehaviour
 {
-    public float activationDelay {get; set;} = 0.5f;
+    [Tooltip("Delay between each item being activated in the group")]
+    public float activationDelay;
+
+    [Tooltip("All activate at the same time.")]
+    public bool SimultaneousActivation = false;
+
+    [Tooltip("Objects that will interact with each other," +
+        "or otherwise are related when it comes to interactions or activations.")]
     public List<Interacteable> interactionGroup;
 
     private void Awake()
