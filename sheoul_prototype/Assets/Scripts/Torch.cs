@@ -1,16 +1,11 @@
 using UnityEngine;
 
-    public class Torch : Interacteable
+    public class Torch : Interactable
     {
 
     [SerializeField] private GameObject Fire;
 
-        private void Awake()
-        {
-            if(StartsActive) Activate();
-            
-
-        }
+        private void Awake() { if(StartsActive) Activate(); }
 
         protected override void Activate()
         {

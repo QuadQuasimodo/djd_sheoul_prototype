@@ -1,6 +1,6 @@
 using UnityEngine;
 
-    public class Door : Interacteable
+    public class Door : Interactable
     {
         private Animator _animator;
 

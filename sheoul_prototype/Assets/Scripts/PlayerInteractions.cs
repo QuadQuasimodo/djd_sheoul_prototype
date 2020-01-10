@@ -12,13 +12,7 @@ public class PlayerInteractions : MonoBehaviour
 
     public CanvasManager       canvasManager;
     private Transform          cameraTransform;
-    private Interacteable       currentInteractive;
-
-    // private List<Interactable> inventory;
-   // private bool                     hasInventoryRequirements;
-    // private bool                     hasActivationRequirements;
-
-
+    private Interactable       currentInteractive;
 
     public void Start()
     {
@@ -44,10 +38,10 @@ public class PlayerInteractions : MonoBehaviour
                             out RaycastHit hitInfo,
                             MAX_INTERACTION_DISTANCE))
         {
-            Interacteable newInteractive =
-                (hitInfo.collider.GetComponent<Interacteable>() == null) ?
-                hitInfo.collider.GetComponentInParent<Interacteable>() :
-                hitInfo.collider.GetComponent<Interacteable>();
+            Interactable newInteractive =
+                (hitInfo.collider.GetComponent<Interactable>() == null) ?
+                hitInfo.collider.GetComponentInParent<Interactable>() :
+                hitInfo.collider.GetComponent<Interactable>();
 
             if (newInteractive != null && newInteractive != currentInteractive)
                 SetCurrentInteractive(newInteractive);
@@ -58,39 +52,16 @@ public class PlayerInteractions : MonoBehaviour
             ClearCurrentInteractive();
     }
 
-    private void SetCurrentInteractive(Interacteable newInteractive)
+    private void SetCurrentInteractive(Interactable newInteractive)
     {
         currentInteractive = newInteractive;
 
-        if(!currentInteractive.unlocked)
+        if(!currentInteractive.locked)
             canvasManager.ShowInteractionPanel(currentInteractive.interactText);
-        else if(currentInteractive.unlocked)
-            canvasManager.ShowInteractionPanel(currentInteractive.interactText);
+        else
+            canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
 
     }
-
-    /*private bool HasInventoryRequirements()
-    {
-        if (currentInteractive.inventoryRequirements == null)
-            return true;
-
-        for (int i = 0; i < currentInteractive.inventoryRequirements.Length; ++i)
-            if (!HasInInventory(currentInteractive.inventoryRequirements[i]))
-                return false;
-
-        return true;
-    }*/
-    
-    /*private bool HasActivationRequirements()
-    {
-        int activated = 0;
-
-        for (int i = 0; i < currentInteractive.activationRequirements.Length; ++i)
-            if (currentInteractive.activationRequirements[i].hasInteracted) activated++;
-
-        if (activated == currentInteractive.activationRequirements.Length) return true;
-        else return false;
-    }*/
 
     private void ClearCurrentInteractive()
     {
@@ -106,7 +77,7 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && currentInteractive != null)
         {
-            if(currentInteractive.unlocked)
+            if(!currentInteractive.locked)
                 currentInteractive.OnInteract();
             if((currentInteractive as InventoryPickup) != null)
             {
@@ -124,8 +95,8 @@ public class PlayerInteractions : MonoBehaviour
     {
         canvasManager.HideInteractionPanel();
         canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
-        //currentInteractive.hasInteracted = true;
     }
+
     IEnumerator WaitTime(float time)
     {
         yield return new WaitForSeconds(time);

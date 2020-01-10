@@ -23,10 +23,8 @@ public class PlayerInventory
         UpdateInventoryIcons();
     }
 
-    public bool HasInInventory(InventoryPickup item)
-    {
-        return inventory.Contains(item);
-    }
+    public bool HasInInventory(InventoryPickup item) =>
+        inventory.Contains(item);
 
     public void UpdateInventoryIcons()
     {
@@ -35,10 +33,4 @@ public class PlayerInventory
         for (int i = 0; i < inventory.Count; ++i)
             canvasManager.SetInventoryIcon(i, inventory[i].inventoryIcon);
     }
-    
-
-
-
-
-
 }

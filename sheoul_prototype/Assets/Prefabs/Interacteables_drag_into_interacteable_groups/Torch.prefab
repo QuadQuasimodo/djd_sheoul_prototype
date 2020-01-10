@@ -230,7 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 139820109129aea4abc05a6802f509c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactText: Press E to light
+  interactText: Press 'E' to light
   interactedText: 
   requirementText: 
   StartsActive: 0
