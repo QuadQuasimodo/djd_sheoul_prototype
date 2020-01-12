@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 public class PlayerInventory
 {
-    private CanvasManager canvasManager;
+    private readonly CanvasManager canvasManager;
+    public readonly List<InventoryPickup> inventory;
+
     public PlayerInventory(CanvasManager cm)
     {
         canvasManager = cm;
+        inventory = new List<InventoryPickup>();
     }
-    
-    List<InventoryPickup> inventory;
 
     public void AddToInventory(InventoryPickup item)
     {

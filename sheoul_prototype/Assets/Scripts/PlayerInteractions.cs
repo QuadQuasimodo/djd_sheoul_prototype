@@ -4,15 +4,17 @@ using System.Collections.Generic;
 
 public class PlayerInteractions : MonoBehaviour
 {
-    private PlayerInventory playerInventory;
 
     private const float  MAX_INTERACTION_DISTANCE = 3.0f;
 
     public Intro intro;
 
-    public CanvasManager       canvasManager;
-    private Transform          cameraTransform;
-    private Interactable       currentInteractive;
+    public CanvasManager        canvasManager;
+
+    private Transform           cameraTransform;
+    private Interactable        currentInteractive;
+    private PlayerInventory     playerInventory;
+
 
     public void Start()
     {
@@ -22,24 +24,21 @@ public class PlayerInteractions : MonoBehaviour
 
     public void Update()
     {
-        CheckForInteractive();
-        CheckForInteraction();
-
-        /*if(intro.introFinished)
-        {
+        /*
+        if(intro.introFinished)
+        {*/
             CheckForInteractive();
-            CheckForInteraction();
+            CheckForInteraction();/*
         }*/
     }
 
     private void CheckForInteractive()
     {
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward,
-                            out RaycastHit hitInfo,
-                            MAX_INTERACTION_DISTANCE))
+                out RaycastHit hitInfo, MAX_INTERACTION_DISTANCE))
         {
             Interactable newInteractive =
-                (hitInfo.collider.GetComponent<Interactable>() == null) ?
+                hitInfo.collider.GetComponent<Interactable>() == null ?
                 hitInfo.collider.GetComponentInParent<Interactable>() :
                 hitInfo.collider.GetComponent<Interactable>();
 
@@ -60,7 +59,6 @@ public class PlayerInteractions : MonoBehaviour
             canvasManager.ShowInteractionPanel(currentInteractive.interactText);
         else
             canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
-
     }
 
     private void ClearCurrentInteractive()
@@ -69,7 +67,6 @@ public class PlayerInteractions : MonoBehaviour
         {
                 currentInteractive = null;
                 canvasManager.HideInteractionPanel();
-            
         }
     }
 
@@ -81,10 +78,10 @@ public class PlayerInteractions : MonoBehaviour
                 currentInteractive.OnInteract();
             if((currentInteractive as InventoryPickup) != null)
             {
-                playerInventory.AddToInventory(currentInteractive as InventoryPickup);
+                print("GOT HERE");
+                playerInventory.AddToInventory((InventoryPickup) currentInteractive);
                 ShowPickeUpMessage();
                 currentInteractive.gameObject.SetActive(false);
-
             } 
             canvasManager.HideInteractionPanel();
             StartCoroutine(WaitTime(1));

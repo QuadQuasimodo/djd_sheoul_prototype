@@ -6,9 +6,9 @@ using UnityEngine;
     public class InventoryPickup : Interactable
     {
 
-    public string               inventoryName;
-    public Sprite               inventoryIcon;
+    public string   inventoryName;
+    public Sprite   inventoryIcon;
 
-    // Gets picked up and put in ivnentory
+    // Gets picked up and put in inventory
     protected override void Activate() { IsActive = true; }
 }

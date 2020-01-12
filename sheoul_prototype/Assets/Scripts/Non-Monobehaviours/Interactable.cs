@@ -19,13 +19,13 @@ public abstract class Interactable : MonoBehaviour
 
     [Tooltip("Starts the scene already activated.")]
     // Starts the scene already activated
-    [SerializeField] public bool StartsActive;
+    [SerializeField] public bool startsActive;
 
     [HideInInspector]
-    public InteractionGroup myInterGroup { get; set; } = null;
+    public InteractionGroup MyInterGroup { get; set; } = null;
 
     [HideInInspector]
-    public int groupIndex { get; set; }
+    public int GroupIndex { get; set; }
 
     [Tooltip("Is the player able to activate this right now.")]
     // Is this item activatable by the player right now
@@ -35,14 +35,15 @@ public abstract class Interactable : MonoBehaviour
     "to be activated for itself to be activateable")]
     // Does this object need all others from its group to be activated for
     // itself to be activatable
-    [SerializeField] private bool RequiresOthersFromGroup = false;
+    [SerializeField] private bool requiresOthersFromGroup = false;
 
     [Tooltip("Other items in the group can activate this one")]
     // Allow other items in the interactiongroup to trigger
     // this item's active state
-    [SerializeField] private bool ActivateableByOtherFromGroup = true;
+    [SerializeField] private bool activateableByOtherFromGroup = true;
 
-    
+
+    protected abstract void Activate();
 
     /// <summary>
     /// Called when player interacts with this
@@ -51,120 +52,92 @@ public abstract class Interactable : MonoBehaviour
     /// time or if there is a slow chain effect </param>
     public virtual void OnInteract()
     {
-
-        if (myInterGroup == null)
+        if (MyInterGroup == null)
         {
             Activate();
             return;
-
-        } 
+        }
 
         int activeCount = 0;
-        foreach (Interactable f in myInterGroup?.interactionGroup)
-        {
+        foreach (Interactable f in MyInterGroup.interactionGroup)
             if (f.IsActive) activeCount++;
-        }
 
-        if (!(activeCount == myInterGroup?.interactionGroup.Count - 1) && RequiresOthersFromGroup) return;
-        else if ((activeCount == myInterGroup?.interactionGroup.Count - 1) && RequiresOthersFromGroup) Activate();
-        else if (!RequiresOthersFromGroup) Activate();
+        if (activeCount != MyInterGroup.interactionGroup.Count - 1 &&
+            requiresOthersFromGroup) return;
+
+        else if ((activeCount == MyInterGroup.interactionGroup.Count - 1) &&
+            requiresOthersFromGroup) Activate();
+
+        else if (!requiresOthersFromGroup) Activate();
 
 
-        if (myInterGroup.ActivationChainType == InteractionGroup.ActivationChainTypes.Simultaneous)
+        if (MyInterGroup.activationChainType ==
+            InteractionGroup.ActivationChainTypes.Simultaneous)
             SimultaneousActivation();
-        else if (myInterGroup.ActivationChainType == InteractionGroup.ActivationChainTypes.Ping_Pong)
+
+        else if (MyInterGroup.activationChainType ==
+            InteractionGroup.ActivationChainTypes.Ping_Pong)
             StartCoroutine(PingPongActivation());
-        else if (myInterGroup.ActivationChainType == InteractionGroup.ActivationChainTypes.Simetrical)
+
+        else if (MyInterGroup.activationChainType ==
+            InteractionGroup.ActivationChainTypes.Simetrical)
             StartCoroutine(SimmetricalActivation());
-
-    }
-
-    protected abstract void Activate();
-
-
-
-    IEnumerator PingPongActivation() 
-    {
-
-        for (int i = groupIndex; i < myInterGroup?.interactionGroup.Count; i++)
-        {
-
-            for (int x = groupIndex; x >= 0; x--)
-            {
-
-                if (myInterGroup.interactionGroup[x].ActivateableByOtherFromGroup)
-                {
-                    yield return new WaitForSeconds(myInterGroup.activationDelay);
-                    myInterGroup?.interactionGroup[x].Activate();
-
-                }
-
-            }
-            if (myInterGroup.interactionGroup[i].ActivateableByOtherFromGroup)
-            {
-                yield return new WaitForSeconds(myInterGroup.activationDelay);
-                myInterGroup?.interactionGroup[i].Activate();
-
-            }
-
-        }
 
     }
 
     void SimultaneousActivation()
     {
-
-        foreach (Interactable i in myInterGroup?.interactionGroup)
+        foreach (Interactable i in MyInterGroup.interactionGroup)
         {
-
-            if (i.ActivateableByOtherFromGroup)
+            if (i.activateableByOtherFromGroup)
                 i.Activate();
-
         }
-
     }
 
-    // not working shit
+    IEnumerator PingPongActivation()
+    {
+        for (int i = GroupIndex; i < MyInterGroup.interactionGroup.Count; i++)
+        {
+            for (int j = GroupIndex; j >= 0; j--)
+            {
+                if (MyInterGroup.interactionGroup[i].activateableByOtherFromGroup)
+                {
+                    yield return new WaitForSeconds(MyInterGroup.activationDelay);
+                    MyInterGroup.interactionGroup[i].Activate();
+                }
+
+                if (MyInterGroup.interactionGroup[j].activateableByOtherFromGroup)
+                {
+                    yield return new WaitForSeconds(MyInterGroup.activationDelay);
+                    MyInterGroup.interactionGroup[j].Activate();
+                }
+            }
+        }
+    }
+
     IEnumerator SimmetricalActivation()
     {
-   
-        for (int i = groupIndex; i < myInterGroup?.interactionGroup.Count; i++)
+        int i, j;
+        for (i = j = GroupIndex; (i < MyInterGroup.interactionGroup.Count) || (j >= 0); i++, j--)
         {
-        LoopBegin:
-            yield return new WaitForSeconds(myInterGroup.activationDelay);
-
-            if (myInterGroup.interactionGroup[i].ActivateableByOtherFromGroup)
+            if (i < MyInterGroup.interactionGroup.Count)
             {
-
-                myInterGroup?.interactionGroup[i].Activate();
-
-            }
-
-            for (int x = groupIndex; x >= 0; x--)
-            {
-               
-                if (myInterGroup.interactionGroup[x].ActivateableByOtherFromGroup)
+                if (MyInterGroup.interactionGroup[i].activateableByOtherFromGroup)
                 {
-                    
-                    myInterGroup?.interactionGroup[x].Activate();
-
-                    
+                    yield return new WaitForSeconds(MyInterGroup.activationDelay);
+                    MyInterGroup.interactionGroup[i].Activate();
                 }
-                goto LoopBegin;
-
             }
 
-
-            
-
+            if (j >= 0)
+            {
+                if (MyInterGroup.interactionGroup[j].activateableByOtherFromGroup)
+                {
+                    yield return new WaitForSeconds(MyInterGroup.activationDelay);
+                    MyInterGroup.interactionGroup[j].Activate();
+                }
+            }
         }
-
-
     }
-
-   
-
-
-
 }
 

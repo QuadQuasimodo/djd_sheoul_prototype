@@ -53,7 +53,6 @@ public class PlayerMovement : MonoBehaviour
         UpdateRotation();
         UpdateCamera();
         if (transform.position.y < -50) Kill();
-
     }
     private void UpdateVelocityFactor()
     {

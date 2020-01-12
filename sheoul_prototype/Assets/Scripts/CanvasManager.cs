@@ -12,6 +12,7 @@ public class CanvasManager : MonoBehaviour
     public void Start()
     {
         HideInteractionPanel();
+        inventoryIcons = new Image[5];
     }
 
     public void ShowInteractionPanel(string interactionMessage)
@@ -23,18 +24,11 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
-    public void HideInteractionPanel()
-    {
-        interactionPanel.SetActive(false);
-    }
+    public void HideInteractionPanel() { interactionPanel.SetActive(false); }
     
-    public void HideInventoryPanel()
-    {
-        inventoryPanel.SetActive(false);
-    }public void ShowInventoryPanel()
-    {
-        inventoryPanel.SetActive(true);
-    }
+    public void HideInventoryPanel() { inventoryPanel.SetActive(false); }
+    
+    public void ShowInventoryPanel() { inventoryPanel.SetActive(true); }
 
     public void ClearInventoryIcons()
     {
@@ -45,9 +39,9 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
-    public void SetInventoryIcon(int i, Sprite icon)
+    public void SetInventoryIcon(int index, Sprite icon)
     {
-        inventoryIcons[i].sprite = icon;
-        inventoryIcons[i].color = Color.white;
+        inventoryIcons[index].sprite = icon;
+        inventoryIcons[index].color = Color.white;
     }
 }

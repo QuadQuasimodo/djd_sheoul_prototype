@@ -5,7 +5,7 @@ using UnityEngine;
 
     [SerializeField] private GameObject Fire;
 
-        private void Awake() { if(StartsActive) Activate(); }
+        private void Awake() { if(startsActive) Activate(); }
 
         protected override void Activate()
         {

@@ -89,15 +89,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afc84d2f15b7015408fb61fb59e0af03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactText: Pickup key
+  interactText: Press 'E' to pick up key
   interactedText: 
   requirementText: 
-  StartsActive: 0
-  unlocked: 1
-  RequiresOthersFromGroup: 0
-  ActivateableByOtherFromGroup: 1
-  inventoryName: 
-  inventoryIcon: {fileID: 0}
+  startsActive: 0
+  locked: 0
+  requiresOthersFromGroup: 0
+  activateableByOtherFromGroup: 0
+  inventoryName: Key
+  inventoryIcon: {fileID: 21300000, guid: d467ebcfe5e0319448189518e01ae51f, type: 3}
 --- !u!1 &8376905613260424240
 GameObject:
   m_ObjectHideFlags: 0

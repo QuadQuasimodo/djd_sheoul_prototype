@@ -21,14 +21,14 @@ public class InteractionGroup : MonoBehaviour
     public bool ChainActivation = false;*/
 
     [Tooltip("The chain reaction has can only be started by a certain object")]
-    public bool SpecificReactionStarter = false;
+    public bool specificReactionStarter = false;
 
     
     [Tooltip("Index of Object that is the starter")]
-    public int IndexOfStarterObject;
+    public int indexOfStarterObject;
 
     [Tooltip("The way the group will activate in the chain.")]
-    public ActivationChainTypes ActivationChainType;
+    public ActivationChainTypes activationChainType;
 
 
 
@@ -36,24 +36,18 @@ public class InteractionGroup : MonoBehaviour
 
     private void Awake()
     {
-        
-
-
-
-        IndexOfStarterObject = Mathf.Clamp(IndexOfStarterObject, 0, interactionGroup.Count);
+        indexOfStarterObject = Mathf.Clamp(indexOfStarterObject, 0, interactionGroup.Count);
         for(int i = 0; i<interactionGroup.Count; i++)
         {
-            interactionGroup[i].myInterGroup = this;
-            interactionGroup[i].groupIndex = i;
+            interactionGroup[i].MyInterGroup = this;
+            interactionGroup[i].GroupIndex = i;
 
-            if (SpecificReactionStarter) 
+            if (specificReactionStarter) 
             {
-                if (i != IndexOfStarterObject) interactionGroup[i].locked = true;
+                if (i != indexOfStarterObject) interactionGroup[i].locked = true;
 
 
             }
         }
-
-
     }
 }
