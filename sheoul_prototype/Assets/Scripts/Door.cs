@@ -10,7 +10,7 @@ public class Door : Interactable
         if (startsActive) Activate();
     }
 
-    protected override void Activate()
+    public override void Activate()
     {
         if (IsActive) return;
 

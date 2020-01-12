@@ -1,14 +1,18 @@
 using UnityEngine;
 
-    // for the effects of these items, Activated means it's in
-    // the player's Inventory
+// for the effects of these items, Activated means it's in
+// the player's Inventory
 
-    public class InventoryPickup : Interactable
-    {
+public class InventoryPickup : Interactable
+{
 
-    public string   inventoryName;
-    public Sprite   inventoryIcon;
+    public string inventoryName;
+    public Sprite inventoryIcon;
 
     // Gets picked up and put in inventory
-    protected override void Activate() { IsActive = true; }
+    public override void Activate()
+    {
+        IsActive = true;
+        //if (MyInterGroup != null) MyInterGroup.ActiveCount++;
+    }
 }

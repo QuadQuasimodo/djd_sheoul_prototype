@@ -78,8 +78,8 @@ public class PlayerInteractions : MonoBehaviour
                 currentInteractive.OnInteract();
             if((currentInteractive as InventoryPickup) != null)
             {
-                print("GOT HERE");
-                playerInventory.AddToInventory((InventoryPickup) currentInteractive);
+                playerInventory.AddToInventory(currentInteractive as InventoryPickup);
+                (currentInteractive as InventoryPickup).Activate();
                 ShowPickeUpMessage();
                 currentInteractive.gameObject.SetActive(false);
             } 
@@ -101,6 +101,4 @@ public class PlayerInteractions : MonoBehaviour
         currentInteractive = null;
         canvasManager.HideInteractionPanel();
     }
-
-   
 }

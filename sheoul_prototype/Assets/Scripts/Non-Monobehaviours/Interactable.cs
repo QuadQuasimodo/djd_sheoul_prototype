@@ -35,7 +35,7 @@ public abstract class Interactable : MonoBehaviour
     "to be activated for itself to be activateable")]
     // Does this object need all others from its group to be activated for
     // itself to be activatable
-    [SerializeField] private bool requiresOthersFromGroup = false;
+    [SerializeField] public bool requiresOthersFromGroup = false;
 
     [Tooltip("Other items in the group can activate this one")]
     // Allow other items in the interactiongroup to trigger
@@ -43,7 +43,7 @@ public abstract class Interactable : MonoBehaviour
     [SerializeField] private bool activateableByOtherFromGroup = true;
 
 
-    protected abstract void Activate();
+    public abstract void Activate();
 
     /// <summary>
     /// Called when player interacts with this
@@ -58,17 +58,15 @@ public abstract class Interactable : MonoBehaviour
             return;
         }
 
-        int activeCount = 0;
         foreach (Interactable f in MyInterGroup.interactionGroup)
-            if (f.IsActive) activeCount++;
+            if (f.IsActive)
+                MyInterGroup.ActiveCount++;
 
-        if (activeCount != MyInterGroup.interactionGroup.Count - 1 &&
-            requiresOthersFromGroup) return;
+        if (locked) return;
 
-        else if ((activeCount == MyInterGroup.interactionGroup.Count - 1) &&
-            requiresOthersFromGroup) Activate();
+        else if (!locked) Activate();
 
-        else if (!requiresOthersFromGroup) Activate();
+        //else if (!requiresOthersFromGroup) Activate();
 
 
         if (MyInterGroup.activationChainType ==
@@ -96,27 +94,6 @@ public abstract class Interactable : MonoBehaviour
 
     IEnumerator PingPongActivation()
     {
-        for (int i = GroupIndex; i < MyInterGroup.interactionGroup.Count; i++)
-        {
-            for (int j = GroupIndex; j >= 0; j--)
-            {
-                if (MyInterGroup.interactionGroup[i].activateableByOtherFromGroup)
-                {
-                    yield return new WaitForSeconds(MyInterGroup.activationDelay);
-                    MyInterGroup.interactionGroup[i].Activate();
-                }
-
-                if (MyInterGroup.interactionGroup[j].activateableByOtherFromGroup)
-                {
-                    yield return new WaitForSeconds(MyInterGroup.activationDelay);
-                    MyInterGroup.interactionGroup[j].Activate();
-                }
-            }
-        }
-    }
-
-    IEnumerator SimmetricalActivation()
-    {
         int i, j;
         for (i = j = GroupIndex; (i < MyInterGroup.interactionGroup.Count) || (j >= 0); i++, j--)
         {
@@ -134,6 +111,31 @@ public abstract class Interactable : MonoBehaviour
                 if (MyInterGroup.interactionGroup[j].activateableByOtherFromGroup)
                 {
                     yield return new WaitForSeconds(MyInterGroup.activationDelay);
+                    MyInterGroup.interactionGroup[j].Activate();
+                }
+            }
+        }
+    }
+
+    IEnumerator SimmetricalActivation()
+    {
+        int i, j;
+        for (i = j = GroupIndex; (i < MyInterGroup.interactionGroup.Count) || (j >= 0); i++, j--)
+        {
+            yield return new WaitForSeconds(MyInterGroup.activationDelay);
+
+            if (i < MyInterGroup.interactionGroup.Count)
+            {
+                if (MyInterGroup.interactionGroup[i].activateableByOtherFromGroup)
+                {
+                    MyInterGroup.interactionGroup[i].Activate();
+                }
+            }
+
+            if (j >= 0)
+            {
+                if (MyInterGroup.interactionGroup[j].activateableByOtherFromGroup)
+                {
                     MyInterGroup.interactionGroup[j].Activate();
                 }
             }

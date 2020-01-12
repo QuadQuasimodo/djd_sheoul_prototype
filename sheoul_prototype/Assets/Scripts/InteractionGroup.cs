@@ -31,9 +31,7 @@ public class InteractionGroup : MonoBehaviour
     public ActivationChainTypes activationChainType;
 
 
-
-
-
+    public int ActiveCount { get; set; } = 0;
     private void Awake()
     {
         indexOfStarterObject = Mathf.Clamp(indexOfStarterObject, 0, interactionGroup.Count);
@@ -42,11 +40,23 @@ public class InteractionGroup : MonoBehaviour
             interactionGroup[i].MyInterGroup = this;
             interactionGroup[i].GroupIndex = i;
 
-            if (specificReactionStarter) 
+            if ((specificReactionStarter && i != indexOfStarterObject) ||
+                interactionGroup[i].requiresOthersFromGroup) 
             {
-                if (i != indexOfStarterObject) interactionGroup[i].locked = true;
+                interactionGroup[i].locked = true;
+            }
+        }
+    }
 
-
+    private void Update()
+    {
+        for (int i = 0; i < interactionGroup.Count; i++)
+        {
+            if (interactionGroup[i].locked && interactionGroup[i].requiresOthersFromGroup)
+            {
+                print(ActiveCount);
+                if (ActiveCount == interactionGroup.Count - 1)
+                    interactionGroup[i].locked = false;
             }
         }
     }

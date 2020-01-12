@@ -12,7 +12,6 @@ public class CanvasManager : MonoBehaviour
     public void Start()
     {
         HideInteractionPanel();
-        inventoryIcons = new Image[5];
     }
 
     public void ShowInteractionPanel(string interactionMessage)

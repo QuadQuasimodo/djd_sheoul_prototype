@@ -7,7 +7,7 @@ using UnityEngine;
 
         private void Awake() { if(startsActive) Activate(); }
 
-        protected override void Activate()
+        public override void Activate()
         {
             if(IsActive) return;
             Fire.SetActive(true);
