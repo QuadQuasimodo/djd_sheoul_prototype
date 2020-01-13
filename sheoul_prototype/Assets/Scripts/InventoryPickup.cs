@@ -13,6 +13,6 @@ public class InventoryPickup : Interactable
     public override void Activate()
     {
         IsActive = true;
-        //if (MyInterGroup != null) MyInterGroup.ActiveCount++;
+        if (MyInterGroup != null) MyInterGroup.ActiveCount++;
     }
 }

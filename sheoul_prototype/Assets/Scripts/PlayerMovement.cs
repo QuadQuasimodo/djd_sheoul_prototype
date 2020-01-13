@@ -4,40 +4,49 @@ public class PlayerMovement : MonoBehaviour
 {
     //Movement Constants
 
-    private const float MAX_ACCELERATION         = 100.0f;
-    private const float GRAVITY_ACCELERATION     = 20.0f;
+    private const float MAX_ACCELERATION = 100.0f;
+    private const float GRAVITY_ACCELERATION = 20.0f;
 
-    private const float MAX_FORWARD_VELOCITY     = 5.0f;
-    private const float MAX_BACKWARD_VELOCITY    = 4.0f;
-    private const float MAX_STRAFE_VELOCITY      = 4.0f;
-    private const float MAX_FALL_VELOCITY        = 100.0f;
-    private const float ANGULAR_VELOCITY_FACTOR  = 2.0f;
+    private const float MAX_FORWARD_VELOCITY = 5.0f;
+    private const float MAX_BACKWARD_VELOCITY = 4.0f;
+    private const float MAX_STRAFE_VELOCITY = 4.0f;
+    private const float MAX_FALL_VELOCITY = 100.0f;
+    private const float ANGULAR_VELOCITY_FACTOR = 2.0f;
 
     private const float DIAGONAL_VELOCITY_FACTOR = 0.7f;
-    private const float WALK_VELOCITY_FACTOR     = 1.0f;
-    private const float RUN_VELOCITY_FACTOR      = 1.25f;
+    private const float WALK_VELOCITY_FACTOR = 1.0f;
+    private const float RUN_VELOCITY_FACTOR = 1.25f;
 
-    private const float MIN_HEAD_LOOK_ROTATION   = 75.0f;
-    private const float MAX_HEAD_LOOK_ROTATION   = 75.0f;
+    private const float MIN_HEAD_LOOK_ROTATION = 75.0f;
+    private const float MAX_HEAD_LOOK_ROTATION = 75.0f;
+
+    private const float CROUCH_PLAYER_HEIGHT = 1.2f;
+    private const float NORMAL_PLAYER_HEIGHT = 2.0f;
+    private const float CROUCH_TIME = 0.1f;
 
     private Vector3 spawn;
     //Istance Variables
 
     private CharacterController controller;
-    private Transform           cameraTransform;
+    private Transform cameraTransform;
 
     private Vector3 acceleration;
     private Vector3 velocity;
-    private float   velocityFactor;
+    private float velocityFactor;
+
+    private float height;
+    private float crouchTime;
 
     // Start is called before the first frame update
     private void Start()
     {
-        controller       = GetComponent<CharacterController>();
-        cameraTransform  = GetComponentInChildren<Camera>().transform;
-        acceleration     = Vector3.zero;
-        velocity         = Vector3.zero;
-        velocityFactor   = WALK_VELOCITY_FACTOR;
+        controller = GetComponent<CharacterController>();
+        cameraTransform = GetComponentInChildren<Camera>().transform;
+        acceleration = Vector3.zero;
+        velocity = Vector3.zero;
+        velocityFactor = WALK_VELOCITY_FACTOR;
+        height = NORMAL_PLAYER_HEIGHT;
+        crouchTime = CROUCH_TIME;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -50,9 +59,9 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         UpdateVelocityFactor();
+        UpdateHeightValue();
         UpdateRotation();
         UpdateCamera();
-        if (transform.position.y < -50) Kill();
     }
     private void UpdateVelocityFactor()
     {
@@ -61,6 +70,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetAxis("Strafe") != 0 && Input.GetAxis("Forward") != 0)
             velocity *= DIAGONAL_VELOCITY_FACTOR;
+    }
+
+    private void UpdateHeightValue()
+    {
+        if (Input.GetButton("Crouch")) height = CROUCH_PLAYER_HEIGHT;
+        else height = NORMAL_PLAYER_HEIGHT;
+
     }
 
     private void UpdateRotation()
@@ -84,19 +100,23 @@ public class PlayerMovement : MonoBehaviour
         cameraTransform.localEulerAngles = cameraRotation;
     }
 
+
+
     // FixedUpdate is called every fixed framerate frame
     private void FixedUpdate()
     {
         UpdateAcceleration();
         UpdateVelocity();
         UpdatePosition();
+        UpdateHeight();
+        if (transform.position.y < -50) Kill();
     }
 
     private void UpdateAcceleration()
     {
         acceleration.x = Input.GetAxis("Strafe") * MAX_ACCELERATION;
         acceleration.z = Input.GetAxis("Forward") * MAX_ACCELERATION;
-        if(!controller.isGrounded) acceleration.y = -GRAVITY_ACCELERATION;
+        if (!controller.isGrounded) acceleration.y = -GRAVITY_ACCELERATION;
         else acceleration.y = 0f;
     }
 
@@ -123,13 +143,18 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(transform.TransformVector(move));
     }
 
+    private void UpdateHeight()
+    {
+        controller.height = Mathf.MoveTowards(controller.height, height, Time.deltaTime / crouchTime);
+    }
+
     private void Kill()
     {
-         acceleration = Vector3.zero;
-         velocity = Vector3.zero;
-         controller.enabled = false;
+        acceleration = Vector3.zero;
+        velocity = Vector3.zero;
+        controller.enabled = false;
 
-         transform.localPosition = spawn;
-         controller.enabled = true;
+        transform.localPosition = spawn;
+        controller.enabled = true;
     }
 }

@@ -52,9 +52,8 @@ public class InteractionGroup : MonoBehaviour
     {
         for (int i = 0; i < interactionGroup.Count; i++)
         {
-            if (interactionGroup[i].locked && interactionGroup[i].requiresOthersFromGroup)
+            if (interactionGroup[i].locked)
             {
-                print(ActiveCount);
                 if (ActiveCount == interactionGroup.Count - 1)
                     interactionGroup[i].locked = false;
             }

@@ -58,16 +58,9 @@ public abstract class Interactable : MonoBehaviour
             return;
         }
 
-        foreach (Interactable f in MyInterGroup.interactionGroup)
-            if (f.IsActive)
-                MyInterGroup.ActiveCount++;
-
         if (locked) return;
 
         else if (!locked) Activate();
-
-        //else if (!requiresOthersFromGroup) Activate();
-
 
         if (MyInterGroup.activationChainType ==
             InteractionGroup.ActivationChainTypes.Simultaneous)
@@ -80,7 +73,6 @@ public abstract class Interactable : MonoBehaviour
         else if (MyInterGroup.activationChainType ==
             InteractionGroup.ActivationChainTypes.Simetrical)
             StartCoroutine(SimmetricalActivation());
-
     }
 
     void SimultaneousActivation()
@@ -105,7 +97,6 @@ public abstract class Interactable : MonoBehaviour
                     MyInterGroup.interactionGroup[i].Activate();
                 }
             }
-
             if (j >= 0)
             {
                 if (MyInterGroup.interactionGroup[j].activateableByOtherFromGroup)
@@ -131,7 +122,6 @@ public abstract class Interactable : MonoBehaviour
                     MyInterGroup.interactionGroup[i].Activate();
                 }
             }
-
             if (j >= 0)
             {
                 if (MyInterGroup.interactionGroup[j].activateableByOtherFromGroup)

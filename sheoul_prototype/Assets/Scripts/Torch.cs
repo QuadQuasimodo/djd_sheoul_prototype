@@ -1,16 +1,17 @@
 using UnityEngine;
 
-    public class Torch : Interactable
-    {
+public class Torch : Interactable
+{
 
     [SerializeField] private GameObject Fire;
 
-        private void Awake() { if(startsActive) Activate(); }
+    private void Awake() { if (startsActive) Activate(); }
 
-        public override void Activate()
-        {
-            if(IsActive) return;
-            Fire.SetActive(true);
-            IsActive = true;
-        }
+    public override void Activate()
+    {
+        if (IsActive) return;
+        Fire.SetActive(true);
+        IsActive = true;
+        MyInterGroup.ActiveCount++;
     }
+}

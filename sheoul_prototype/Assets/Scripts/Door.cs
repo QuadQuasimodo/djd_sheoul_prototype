@@ -17,6 +17,5 @@ public class Door : Interactable
         _animator.SetTrigger("Interacted");
 
         IsActive = true;
-
     }
 }

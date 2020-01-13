@@ -5,15 +5,15 @@ using System.Collections.Generic;
 public class PlayerInteractions : MonoBehaviour
 {
 
-    private const float  MAX_INTERACTION_DISTANCE = 3.0f;
+    private const float MAX_INTERACTION_DISTANCE = 3.0f;
 
     public Intro intro;
 
-    public CanvasManager        canvasManager;
+    public CanvasManager canvasManager;
 
-    private Transform           cameraTransform;
-    private Interactable        currentInteractive;
-    private PlayerInventory     playerInventory;
+    private Transform cameraTransform;
+    private Interactable currentInteractive;
+    private PlayerInventory playerInventory;
 
 
     public void Start()
@@ -24,12 +24,8 @@ public class PlayerInteractions : MonoBehaviour
 
     public void Update()
     {
-        /*
-        if(intro.introFinished)
-        {*/
-            CheckForInteractive();
-            CheckForInteraction();/*
-        }*/
+        CheckForInteractive();
+        CheckForInteraction();
     }
 
     private void CheckForInteractive()
@@ -42,7 +38,8 @@ public class PlayerInteractions : MonoBehaviour
                 hitInfo.collider.GetComponentInParent<Interactable>() :
                 hitInfo.collider.GetComponent<Interactable>();
 
-            if (newInteractive != null && newInteractive != currentInteractive)
+            if (newInteractive != null && newInteractive != currentInteractive
+                && !newInteractive.IsActive)
                 SetCurrentInteractive(newInteractive);
             else if (newInteractive == null)
                 ClearCurrentInteractive();
@@ -55,7 +52,7 @@ public class PlayerInteractions : MonoBehaviour
     {
         currentInteractive = newInteractive;
 
-        if(!currentInteractive.locked)
+        if (!currentInteractive.locked)
             canvasManager.ShowInteractionPanel(currentInteractive.interactText);
         else
             canvasManager.ShowInteractionPanel(currentInteractive.requirementText);
@@ -65,8 +62,8 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (currentInteractive != null)
         {
-                currentInteractive = null;
-                canvasManager.HideInteractionPanel();
+            currentInteractive = null;
+            canvasManager.HideInteractionPanel();
         }
     }
 
@@ -74,31 +71,27 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && currentInteractive != null)
         {
-            if(!currentInteractive.locked)
-                currentInteractive.OnInteract();
-            if((currentInteractive as InventoryPickup) != null)
+            if ((currentInteractive as InventoryPickup) != null)
             {
                 playerInventory.AddToInventory(currentInteractive as InventoryPickup);
                 (currentInteractive as InventoryPickup).Activate();
-                ShowPickeUpMessage();
                 currentInteractive.gameObject.SetActive(false);
-            } 
+            }
+
+            else if (!currentInteractive.locked) currentInteractive.OnInteract();
             canvasManager.HideInteractionPanel();
-            StartCoroutine(WaitTime(1));
         }
     }
 
-    private void ShowPickeUpMessage()
+    // NOT WORKING CAUSE AS SOON AS THE ITEM IS REMOVED,
+    // THE OBJECT IS CLEARED AND IT'S NOT THE "NEWINTERACTIVE",
+    // SO IT CALLS THE METHOD "ClearCurrentInteractive",
+    // WHICH HIDES THE INTERACTIONPANEL
+    IEnumerator ShowInteractedMessage(float time)
     {
         canvasManager.HideInteractionPanel();
         canvasManager.ShowInteractionPanel(currentInteractive.interactedText);
-    }
-
-    IEnumerator WaitTime(float time)
-    {
         yield return new WaitForSeconds(time);
-
-        currentInteractive = null;
         canvasManager.HideInteractionPanel();
     }
 }

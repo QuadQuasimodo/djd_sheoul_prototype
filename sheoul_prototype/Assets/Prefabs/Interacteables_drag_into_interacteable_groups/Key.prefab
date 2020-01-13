@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactText: Press 'E' to pick up key
-  interactedText: 
+  interactedText: You picked up a key!
   requirementText: 
   startsActive: 0
   locked: 0
