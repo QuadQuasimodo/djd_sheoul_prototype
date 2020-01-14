@@ -1530,10 +1530,10 @@ MonoBehaviour:
   - {fileID: 801749332}
   - {fileID: 1140244408}
   - {fileID: 806855738}
-  activationDelay: 1
+  activationDelay: 0.2
   specificReactionStarter: 0
   indexOfStarterObject: 0
-  activationChainType: 1
+  activationChainType: 2
 --- !u!4 &929758300
 Transform:
   m_ObjectHideFlags: 0
@@ -2494,6 +2494,7 @@ MonoBehaviour:
   startsActive: 0
   locked: 0
   requiresOthersFromGroup: 1
+  activatesAutomatically: 1
   activateableByOtherFromGroup: 0
 --- !u!95 &1513103413
 Animator:
@@ -3491,6 +3492,7 @@ MonoBehaviour:
   startsActive: 0
   locked: 0
   requiresOthersFromGroup: 1
+  activatesAutomatically: 0
   activateableByOtherFromGroup: 0
 --- !u!65 &2097352236
 BoxCollider:

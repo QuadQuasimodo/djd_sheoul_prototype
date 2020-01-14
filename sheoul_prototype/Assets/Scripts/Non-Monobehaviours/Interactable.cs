@@ -37,10 +37,15 @@ public abstract class Interactable : MonoBehaviour
     // itself to be activatable
     [SerializeField] public bool requiresOthersFromGroup = false;
 
+    [Tooltip("Activates automatically once every object in group is active")]
+    ///////// INSERT MESSAGE HERE /////////
+    [SerializeField] public bool activatesAutomatically = false;
+
     [Tooltip("Other items in the group can activate this one")]
     // Allow other items in the interactiongroup to trigger
     // this item's active state
     [SerializeField] private bool activateableByOtherFromGroup = true;
+
 
 
     public abstract void Activate();

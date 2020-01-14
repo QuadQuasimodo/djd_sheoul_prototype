@@ -73,6 +73,7 @@ public class PlayerInteractions : MonoBehaviour
         {
             if ((currentInteractive as InventoryPickup) != null)
             {
+                //StartCoroutine(ShowInteractedMessage(3));
                 playerInventory.AddToInventory(currentInteractive as InventoryPickup);
                 (currentInteractive as InventoryPickup).Activate();
                 currentInteractive.gameObject.SetActive(false);

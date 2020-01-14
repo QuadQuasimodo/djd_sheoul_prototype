@@ -55,7 +55,11 @@ public class InteractionGroup : MonoBehaviour
             if (interactionGroup[i].locked)
             {
                 if (ActiveCount == interactionGroup.Count - 1)
+                {
                     interactionGroup[i].locked = false;
+                    if (interactionGroup[i].activatesAutomatically)
+                        interactionGroup[i].Activate();
+                }
             }
         }
     }
